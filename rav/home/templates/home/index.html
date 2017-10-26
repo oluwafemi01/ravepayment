@@ -1,0 +1,77 @@
+<html>
+<head>
+  <title>Rave Inline Demo</title>
+  <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <style>
+	#submitPay{ color: #fff;
+		background-color: #0a2740;
+		border-color: #142a3e;
+		padding: 2px 6px 3px;
+		display: inline-block;
+		margin-bottom: 0;
+		font-size: 14px;
+		font-weight: 400;
+		line-height: 1.42857143;
+		text-align: center;
+		white-space: nowrap;
+		vertical-align: middle;
+	}
+	</style>
+</head>
+
+<body>
+    <p style="font-weight:bold;">{{integrity}}</p>
+    <h1 class="text-center">Pay with Rave</h1>
+  <div class="container" id="ravepay">
+      <div class="col-md-4 col-md-offset-4 text-center">
+        <form>
+            <button id="submitPay" type="button">Pay Now</button>
+            <div class="clearfix"></div>
+        </form>
+      </div>
+  </div>
+    <!--
+<script type="text/javascript" src="http://flw-pms-dev.eu-west-1.elasticbeanstalk.com/flwv3-pug/getpaidx/api/flwpbf-inline.js"></script>
+<script>
+
+-->
+<script type="text/javascript" src="https://rave-api-v2.herokuapp.com/flwv3-pug/getpaidx/api/simplepay-inline.js"></script>
+<script>
+$( "#submitPay" ).click(function() {
+	var pubkey = "FLWPUBK-e618d594c3f4392a5d4242d7af86f201-X"
+	getpaidSetup({
+		PBFPubKey:pubkey,
+		amount:1000,
+		currency:'NGN',
+		country:'NG',
+		customer_email:"user@example.com",
+		customer_firstname: "Temi",
+      	customer_lastname: "Adelewa",
+		txref:'82993',
+		integrity_hash:'{{integrity}}',
+		onclose:function(){},
+		callback: function(response){
+
+			var flw_ref = response.tx.flwRef; // collect flwRef returned and pass to a server page to complete status check.
+			console.log("This is the response returned after a charge", response);
+			if (response.tx.chargeResponseCode == "00" || response.tx.chargeResponseCode == "0"){
+			  // redirect to a success page
+			  window.location = "/verify/?flw="+flw_ref;  //Add your success page here
+			  alert("Payment Successful")
+			}else{
+			  // redirect to a failure page.
+			  alert("it's wasn't successful")
+			  window.location = "/verify/?flw="+flw_ref;  //Add your failure page here
+			}
+
+		}
+	});
+
+});
+</script>
+</body>
+
+</html>
